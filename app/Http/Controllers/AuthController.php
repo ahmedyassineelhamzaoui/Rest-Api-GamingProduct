@@ -3,33 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function __construct()
     {
-      $request->validate([
-          'name'      => 'required|max:30|string',
-          'email'     => 'required|email|max:255',
-          'password'  => 'required|string|min:8'
-      ]);
-      $user = User::create([
-          'name'     => $request->name,
-          'email'    => $request->email,
-          'password' => Hash::make($request->password)
-      ]);
-      // generate a token for the user
-      $token = Auth::login($user);
-      return response()->json([
-          'status' => 'success',
-          'message' => 'User created successfully',
-          'user' => $user,
-          'authorisation' => [
-              'token' => $token,
-              'type' => 'bearer',
-          ]
-      ]);
+        $this->middleware('auth.api', ['exept' => ['login', 'cretaeUser']]);
     }
+    public function cretaeUser(Request $request)
+    {
+        $request->validate(
+            [
+                'name'     => 'required|string|max:20',
+                'email'    => 'required|email',
+                'password' => 'required|string|min:8|mixed|numbers|symbols'
+            ]
+        );
+        // Create a new user with the submitted data
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => $request->password
+        ]);
+        // generates a new JWT token
+        $token = Auth::login($user);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'user has been created successfuly',
+            'user'    => $user,
+            'authorization' => [
+                'token' => $token,
+                'type'  => 'bearer'
+            ]
+        ]);
+    }
+   
 }
