@@ -16,6 +16,73 @@
         }
     },
     "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "create a new user",
+                "description": "create a new user using the reqiuerd information name,email,password",
+                "operationId": "30797183e225c26ac284372d6fca8e8d",
+                "requestBody": {
+                    "description": "User information",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "the guest name",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "the guest email address",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "the guest password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "account created successfuly",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "the response status",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "the message of the response",
+                                            "type": "string",
+                                            "example": "account has benn created successfuly"
+                                        },
+                                        "user": {
+                                            "description": "the information of the user who create her account",
+                                            "type": "object"
+                                        },
+                                        "Authorization": {
+                                            "description": "the token of the new user",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
