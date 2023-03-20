@@ -199,7 +199,32 @@ class AuthController extends Controller
             ]
         ]);
     }
-
+    /**
+     * @OA\Get(
+     *    path="/api/logout",
+     *    summary="logout method",
+     *    description="logout the session of the curent conect user",
+     *    tags={"Authentication"},
+     *    @OA\Response(
+     *         response=200,
+     *         description="successfuly log out",
+     *         @OA\JsonContent(
+     *            @OA\Property(
+     *               property="status",
+     *               type="string",
+     *               description="the status of the response",
+     *               example="the status of the response"
+     *            ),
+     *            @OA\Property(
+     *               property="success",
+     *               type="string",
+     *               description="logout successsfuly",
+     *               example="logout successsfuly"
+     *            ),
+     *         ),
+     *    ),
+     * )
+     */
     public function logout()
     {
         Auth::logout();

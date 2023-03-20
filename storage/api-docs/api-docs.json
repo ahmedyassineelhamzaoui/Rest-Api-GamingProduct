@@ -1,14 +1,14 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Blog Management System with REST API",
-        "description": "a scalable and flexible system for managing blog content with the ability to support multiple users.",
+        "title": "gaming product management with REST API",
+        "description": "a scalable and flexible system for managing a store of gaming product .",
         "contact": {
             "email": "ahmed.yassin.elhamzaoui2019@gmail.com"
         },
         "license": {
-            "name": "lazone m7koma",
-            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+            "name": "made by Ahmed Yassine El Hamzaoui",
+            "url": "https://github.com/ahmedyassineelhamzaoui"
         },
         "version": "1.0.0",
         "x-logo": {
@@ -162,6 +162,40 @@
                                         "errors": {
                                             "description": "An object containing validation error messages",
                                             "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "logout method",
+                "description": "logout the session of the curent conect user",
+                "operationId": "3f19b742e4ead13f81ba0d6c0d46ac1b",
+                "responses": {
+                    "200": {
+                        "description": "successfuly log out",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "the status of the response",
+                                            "type": "string",
+                                            "example": "the status of the response"
+                                        },
+                                        "success": {
+                                            "description": "logout successsfuly",
+                                            "type": "string",
+                                            "example": "logout successsfuly"
                                         }
                                     },
                                     "type": "object"

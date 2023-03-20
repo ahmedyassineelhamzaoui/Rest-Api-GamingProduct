@@ -15,14 +15,14 @@ use Illuminate\Routing\Controller as BaseController;
  *              "url": "https://via.placeholder.com/190x90.png?text=L5-Swagger"
  *          }
  *      },
- *      title="Blog Management System with REST API",
- *      description="a scalable and flexible system for managing blog content with the ability to support multiple users.",
+ *      title="gaming product management with REST API",
+ *      description="a scalable and flexible system for managing a store of gaming product .",
  *      @OA\Contact(
  *          email="ahmed.yassin.elhamzaoui2019@gmail.com"
  *      ),
  *     @OA\License(
- *         name="lazone m7koma",
- *         url="https://www.apache.org/licenses/LICENSE-2.0.html"
+ *         name="made by Ahmed Yassine El Hamzaoui",
+ *         url="https://github.com/ahmedyassineelhamzaoui"
  *     )
  * )
  */
