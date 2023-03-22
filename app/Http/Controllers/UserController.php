@@ -347,7 +347,7 @@ class UserController extends Controller
      *         ),
      *     ),
      * )
-     */
+    */
     public function updateProfile(Request $request)
     {
         $user = $request->user();
@@ -369,5 +369,65 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
-   
+    /**
+     * @OA\Get(
+     *    path="/api/users",
+     *    summary="all users",
+     *    description="method to return all users",
+     *    tags={"User"},
+     *    @OA\Response(
+     *        response=200,
+     *        description="the response of success ",
+     *        @OA\JsonContent(
+     *            @OA\Property(
+     *                property="status",
+     *                type="string",
+     *                description="the response of your request",
+     *                example="success",
+     *            ),
+     *            @OA\Property(
+     *                property="users",
+     *                type="object",
+     *                description="all users",
+     *                @OA\Property(
+     *                    property="id",
+     *                    type="number",
+     *                    description="id of user",
+     *                    example=1,
+     *                ),
+     *                @OA\Property(
+     *                    property="name",
+     *                    type="string",
+     *                    description="the user name",
+     *                    example="mohamed",
+     *                ),
+     *                @OA\Property(
+     *                    property="email",
+     *                    type="string",
+     *                    description="the user email",
+     *                    example="mohamed@gmail.com",
+     *                ),
+     *            ),
+     *        ),
+     *   
+     *    )
+     * 
+     * )
+     */
+    public function getAllUsers()
+    {
+        $user=user::all(['id', 'name', 'email']);
+        $numberUsers=$user->count();
+        if($numberUsers>0){
+            return response()->json([
+                'message' => 'users',
+                'users' => $user
+            ]);
+        }
+        else{
+            return response()->json([
+                'message' => 'no data available',
+            ]);
+        }
+    }
 }

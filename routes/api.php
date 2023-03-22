@@ -28,4 +28,5 @@ Route::controller(UserController::class)->group(function(){
    Route::post('change-password','changePassword');
    Route::delete('close-account','closeAccount');
    Route::put('contact-info','updateProfile');
+   Route::get('users','getAllUsers');
 });

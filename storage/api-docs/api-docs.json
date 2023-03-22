@@ -527,6 +527,56 @@
                     }
                 ]
             }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "all users",
+                "description": "method to return all users",
+                "operationId": "32f813ea7a22e2b8b862ef93084426b9",
+                "responses": {
+                    "200": {
+                        "description": "the response of success ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "the response of your request",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "users": {
+                                            "description": "all users",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "id of user",
+                                                    "type": "number",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "description": "the user name",
+                                                    "type": "string",
+                                                    "example": "mohamed"
+                                                },
+                                                "email": {
+                                                    "description": "the user email",
+                                                    "type": "string",
+                                                    "example": "mohamed@gmail.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
