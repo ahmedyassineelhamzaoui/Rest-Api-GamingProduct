@@ -376,6 +376,48 @@
                     }
                 ]
             }
+        },
+        "/api/deleteProfile": {
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete the conected user",
+                "description": "Delete the authenticated user",
+                "operationId": "eaef42d2bda2e1695b28bb32edcf322f",
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "A message describing the response status",
+                                            "type": "string",
+                                            "example": "User deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized action"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     }
 }

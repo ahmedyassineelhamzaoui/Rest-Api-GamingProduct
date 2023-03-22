@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['sendEmail', 'changePassword', 'failedResponse', 'successResponse']]);
+    }
     /**
      * @OA\Post(
      *    path="/api/reset-pasword",
@@ -71,7 +75,7 @@ class UserController extends Controller
      *       ),
      *    ),
      * )
-    */
+     */
     public function sendEmail(Request $request)
     {
         $user = User::where('email', $request->email)->first();
@@ -203,6 +207,53 @@ class UserController extends Controller
                 'status' => 'error',
                 'message' => 'method not allowd'
             ], 405);
+        }
+    }
+    /**
+     * @OA\DELETE(
+     *     path="/api/deleteProfile",
+     *     summary="Delete the conected user",
+     *     description="Delete the authenticated user",
+     *     tags={"User"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="User deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 description="The status of the response",
+     *                 example="success",
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="A message describing the response status",
+     *                 example="User deleted successfully",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized action",
+     *     ),
+     * )
+     */
+    public function destroy(Request $request)
+    {
+        $user = $request->user();
+        if ($user) {
+            $user->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile deleted successfully',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'faild to complete this request',
+            ], 401);
         }
     }
 }
