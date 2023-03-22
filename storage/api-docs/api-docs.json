@@ -260,7 +260,7 @@
                             }
                         }
                     },
-                    "422": {
+                    "404": {
                         "description": "the email dosn't exist",
                         "content": {
                             "application/json": {
@@ -283,6 +283,98 @@
                         }
                     }
                 }
+            }
+        },
+        "/api/changePassword": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "change password ",
+                "description": "change the password of the user",
+                "operationId": "c74a6833e836dc51c3133a86fb0a586e",
+                "requestBody": {
+                    "description": "user information to change his password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "pasword": {
+                                        "description": "the new password",
+                                        "type": "string",
+                                        "example": "enter your new password"
+                                    },
+                                    "confirm password": {
+                                        "description": "the confirmation of password",
+                                        "type": "string",
+                                        "example": "confirm your password"
+                                    },
+                                    "token": {
+                                        "description": "the token to reset the password ",
+                                        "type": "string",
+                                        "example": "enter the token that was in your email address"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "password changed successfuly",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "A message describing the response status",
+                                            "type": "string",
+                                            "example": "Password has been changed successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowd"
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "the status response",
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "description": "An object containing validation error messages",
+                                            "type": "string",
+                                            "example": "validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     }

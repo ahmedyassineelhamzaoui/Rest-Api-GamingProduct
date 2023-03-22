@@ -71,29 +71,19 @@ class UserController extends Controller
      *       ),
      *    ),
      * )
-     */
+    */
     public function sendEmail(Request $request)
     {
-        if (!$this->validateEmail($request->email)) {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
             return $this->failedResponse();
         }
-        $user = User::where('email', $request->email)->first();
         $token = Str::random(40);
         $user->remembre_token = $token;
         $user->save();
         Mail::to($request->email)->send(new SendMailreset($token, $request->email, $user->name));
-        $this->send($request->email, $user->name);
         return $this->successResponse($token);
-    }
-
-    public function send($email, $name)
-    {
-        $user = User::where('email', $email)->first();
-        
-    }
-    public function validateEmail($email)
-    {
-        return User::where('email', $email)->first();
     }
 
     public function failedResponse()
@@ -110,7 +100,81 @@ class UserController extends Controller
             'token'  => $token
         ], 200);
     }
-
+    /**
+     * @OA\POST(
+     *     path="/api/changePassword",
+     *     summary="change password ",
+     *     description="change the password of the user",
+     *     tags={"User"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *        required=true,
+     *        description="user information to change his password",
+     *        @OA\JsonContent(
+     *            @OA\Property(
+     *                property="pasword",
+     *                type="string",
+     *                description="the new password",
+     *                example="enter your new password",
+     *            ),
+     *            @OA\Property(
+     *                property="confirm password",
+     *                type="string",
+     *                description="the confirmation of password",
+     *                example="confirm your password",
+     *            ),
+     *            @OA\Property(
+     *                property="token",
+     *                type="string",
+     *                description="the token to reset the password ",
+     *                example="enter the token that was in your email address"
+     *            ),
+     *        ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="password changed successfuly",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 description="The status of the response",
+     *                 example="success",
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="A message describing the response status",
+     *                 example="Password has been changed successfully",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Method not allowd",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *               property="status",  
+     *               type="string",
+     *               description="the status response",
+     *               example="error"
+     *             ),
+     *             @OA\Property(
+     *               property="message",  
+     *               type="string",
+     *               description="An object containing validation error messages",
+     *               example="validation error",
+     *             ),
+     *         ),
+     *
+     *        ),
+     *     ),
+     * )
+     */
     public function changePassword(Request $request)
     {
         $user = $request->user();
