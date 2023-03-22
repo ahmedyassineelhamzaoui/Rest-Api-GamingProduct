@@ -205,6 +205,85 @@
                     }
                 }
             }
+        },
+        "/api/reset-pasword": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "forgot passwword",
+                "description": "method that allows user who has an account to reset his password",
+                "operationId": "9c2d8d3e99e31f9071be42b08d10f127",
+                "requestBody": {
+                    "description": "User email",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "email of user",
+                                        "type": "string",
+                                        "example": "enter your email"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "email reset was send successfuly",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "the status of the response",
+                                            "example": "the staus of the response"
+                                        },
+                                        "message": {
+                                            "description": "token that need to reset your password",
+                                            "properties": {
+                                                "token": {
+                                                    "description": "the token of user",
+                                                    "type": "string",
+                                                    "example": "the token of user"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "the email dosn't exist",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "status of response",
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "description": "the email dosn't exist in database",
+                                            "type": "string",
+                                            "example": "the email dosn't exist"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
