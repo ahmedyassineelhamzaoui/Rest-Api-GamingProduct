@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Mail\SendMailreset;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
@@ -71,32 +71,26 @@ class UserController extends Controller
      *       ),
      *    ),
      * )
-    */
+     */
     public function sendEmail(Request $request)
     {
-        if(!$this->validateEmail($request->email)) {
+        if (!$this->validateEmail($request->email)) {
             return $this->failedResponse();
         }
-        $name=User::where('email',$request->email)->first()->name;
-        $this->send($request->email,$name);
-        return $this->successResponse();
-    }
-
-    public function send($email,$name)
-    {
-        $user=User::where('email',$email)->first();
-        $token = $this->createToken($email);
-        $user->remembre_token=$token;
-        $user->save();
-        Mail::to($email)->send(new SendMailreset($token, $email,$name));
-    }
-
-    public function createToken($email)
-    {
+        $user = User::where('email', $request->email)->first();
         $token = Str::random(40);
-        return $token;
+        $user->remembre_token = $token;
+        $user->save();
+        Mail::to($request->email)->send(new SendMailreset($token, $request->email, $user->name));
+        $this->send($request->email, $user->name);
+        return $this->successResponse($token);
     }
 
+    public function send($email, $name)
+    {
+        $user = User::where('email', $email)->first();
+        
+    }
     public function validateEmail($email)
     {
         return User::where('email', $email)->first();
@@ -109,12 +103,42 @@ class UserController extends Controller
         ], 404);
     }
 
-    public function successResponse()
+    public function successResponse($token)
     {
         return response()->json([
-            'data' => "Reset email link sent successfully, please check your inbox"
+            'message' => "Reset email link sent successfully, please check your inbox",
+            'token'  => $token
         ], 200);
     }
 
-    
+    public function changePassword(Request $request)
+    {
+        $user = $request->user();
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'password' => 'required|min:8',
+                'confirm_password' => 'required|min:8|same:password',
+                'token' => 'required|string'
+            ]);
+            $user = User::where('remembre_token', $request->token)->first();
+            if ($user) {
+                $user->password = Hash::make($request->password);
+                $user->save();
+                return response()->json([
+                    'statuts' => 'success',
+                    'message' => 'your password has been updated successfuly',
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'you do not have permession to access into this page'
+                ], 401);
+            }
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'method not allowd'
+            ], 405);
+        }
+    }
 }

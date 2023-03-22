@@ -25,4 +25,5 @@ Route::controller(AuthController::class)->group(function(){
 
 Route::controller(UserController::class)->group(function(){
    Route::post('reset-password','sendEmail');
+   Route::post('change-password','changePassword');
 });
