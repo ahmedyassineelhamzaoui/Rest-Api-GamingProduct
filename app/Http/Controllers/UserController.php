@@ -240,7 +240,7 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function destroy(Request $request)
+    public function closeAccount(Request $request)
     {
         $user = $request->user();
         if ($user) {
@@ -256,4 +256,118 @@ class UserController extends Controller
             ], 401);
         }
     }
+    /**
+     * @OA\Put(
+     *     path="/api/updateProfile",
+     *     summary="Update user information",
+     *     description="Update the authenticated user's information",
+     *     tags={"User"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         description="The updated user information",
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 description="The user's new name",
+     *             ),
+     *             @OA\Property(
+     *                 property="email",
+     *                 type="string",
+     *                 description="The user's new email address",
+     *             ),
+     *             @OA\Property(
+     *                 property="password",
+     *                 type="string",
+     *                 description="The user's new password",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 description="The status of the response",
+     *                 example="success",
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="A message describing the response status",
+     *                 example="User updated successfully",
+     *             ),
+     *             @OA\Property(
+     *                 property="user",
+     *                 type="object",
+     *                 description="The updated user object",
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="integer",
+     *                     description="The user's ID",
+     *                     example=1,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string",
+     *                     description="The user's name",
+     *                     example="John Doe",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string",
+     *                     description="The user's email address",
+     *                     example="example@example.com",
+     *                 ),
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized action",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="A message describing the validation error",
+     *                 example="The given data was invalid.",
+     *             ),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 description="An object containing validation error messages",
+     *             ),
+     *         ),
+     *     ),
+     * )
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+        
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+        if ($request->has('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User updated successfully',
+            'user' => $user,
+        ]);
+    }
+   
 }

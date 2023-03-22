@@ -26,5 +26,6 @@ Route::controller(AuthController::class)->group(function(){
 Route::controller(UserController::class)->group(function(){
    Route::post('reset-password','sendEmail');
    Route::post('change-password','changePassword');
-   Route::post('close-account','destroy');
+   Route::delete('close-account','closeAccount');
+   Route::put('contact-info','updateProfile');
 });

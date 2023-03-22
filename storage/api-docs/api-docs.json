@@ -384,7 +384,7 @@
                 ],
                 "summary": "Delete the conected user",
                 "description": "Delete the authenticated user",
-                "operationId": "eaef42d2bda2e1695b28bb32edcf322f",
+                "operationId": "c6fa876c04f7bf4be3469878a440baea",
                 "responses": {
                     "200": {
                         "description": "User deleted successfully",
@@ -410,6 +410,115 @@
                     },
                     "401": {
                         "description": "Unauthorized action"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/updateProfile": {
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user information",
+                "description": "Update the authenticated user's information",
+                "operationId": "ef7cf907e95fa949db10212eca527dcd",
+                "requestBody": {
+                    "description": "The updated user information",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "The user's new name",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "The user's new email address",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "The user's new password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "A message describing the response status",
+                                            "type": "string",
+                                            "example": "User updated successfully"
+                                        },
+                                        "user": {
+                                            "description": "The updated user object",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "The user's ID",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "description": "The user's name",
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "description": "The user's email address",
+                                                    "type": "string",
+                                                    "example": "example@example.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized action"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A message describing the validation error",
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "description": "An object containing validation error messages",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
