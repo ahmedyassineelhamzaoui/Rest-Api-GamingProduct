@@ -347,6 +347,87 @@
                 }
             }
         },
+        "/api/update-categorie": {
+            "put": {
+                "tags": [
+                    "Categorie"
+                ],
+                "summary": "Update a categorie",
+                "description": "Updates a specific categorie based on its ID",
+                "operationId": "77810c8c97e0630a2b85ce7294d6c7b3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The ID of the categorie to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The name of the categorie",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categorie updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "The message to be returned",
+                                            "type": "string",
+                                            "example": "categorie updated successfully"
+                                        },
+                                        "categorie": {
+                                            "description": "The updated categorie object",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categorie not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "description": "The message to be returned",
+                                            "type": "string",
+                                            "example": "categorie not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/reset-pasword": {
             "post": {
                 "tags": [

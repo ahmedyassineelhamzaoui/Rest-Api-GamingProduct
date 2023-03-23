@@ -145,7 +145,75 @@ class CategorieController extends Controller
          ], 404);
       }
    }
-   public function updateCtaegorie(Request $request)
+   /**
+    * @OA\Put(
+    *     path="/api/update-categorie",
+    *     summary="Update a categorie",
+    *     description="Updates a specific categorie based on its ID",
+    *     tags={"Categorie"},
+    *     @OA\Parameter(
+    *         name="id",
+    *         in="query",
+    *         description="The ID of the categorie to be updated",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="integer",
+    *             format="int64"
+    *         )
+    *     ),
+    *     @OA\Parameter(
+    *         name="name",
+    *         in="query",
+    *         description="The name of the categorie",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string"
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="Categorie updated successfully",
+    *         @OA\JsonContent(
+    *             @OA\Property(
+    *                 property="status",
+    *                 type="string",
+    *                 description="The status of the response",
+    *                 example="success"
+    *             ),
+    *             @OA\Property(
+    *                 property="message",
+    *                 type="string",
+    *                 description="The message to be returned",
+    *                 example="categorie updated successfully"
+    *             ),
+    *             @OA\Property(
+    *                 property="categorie",
+    *                 type="object",
+    *                 description="The updated categorie object",
+    *             )
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=404,
+    *         description="Categorie not found",
+    *         @OA\JsonContent(
+    *             @OA\Property(
+    *                 property="status",
+    *                 type="string",
+    *                 description="The status of the response",
+    *                 example="error"
+    *             ),
+    *             @OA\Property(
+    *                 property="message",
+    *                 type="string",
+    *                 description="The message to be returned",
+    *                 example="categorie not found"
+    *             )
+    *         )
+    *     )
+    * )
+    */
+   public function updateCategorie(Request $request)
    {
       $request->validate([
          'id' => 'required|integer '
@@ -155,15 +223,17 @@ class CategorieController extends Controller
          if ($request->has('name')) {
             $categorie->name = $request->name;
          }
+         $categorie->save();
          return response()->json([
             'status' => 'success',
-            'message' => 'categorie updated successfuly'
-         ],200);
+            'message' => 'categorie updated successfuly',
+            'categorie' => $categorie
+         ], 200);
       } else {
          return response()->json([
             'status' => 'error',
             'message' => 'categorie not found'
-         ],404);
+         ], 404);
       }
    }
 }

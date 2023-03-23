@@ -37,5 +37,5 @@ Route::controller(UserController::class)->group(function(){
 Route::controller(CategorieController::class)->group(function(){
    Route::post('create-categorie','addCategorie');
    Route::delete('delete-categorie','deleteCategorie');
-   Route::post('update-categorie','updateCategorie');
+   Route::put('update-categorie','updateCategorie');
 });
