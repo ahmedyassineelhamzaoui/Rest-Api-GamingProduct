@@ -347,11 +347,11 @@ class UserController extends Controller
      *         ),
      *     ),
      * )
-    */
+     */
     public function updateProfile(Request $request)
     {
         $user = $request->user();
-        
+
         if ($request->has('name')) {
             $user->name = $request->name;
         }
@@ -416,18 +416,197 @@ class UserController extends Controller
      */
     public function getAllUsers()
     {
-        $user=user::all(['id', 'name', 'email']);
-        $numberUsers=$user->count();
-        if($numberUsers>0){
+        $user = user::all(['id', 'name', 'email']);
+        $numberUsers = $user->count();
+        if ($numberUsers > 0) {
             return response()->json([
                 'message' => 'users',
                 'users' => $user
             ]);
-        }
-        else{
+        } else {
             return response()->json([
                 'message' => 'no data available',
             ]);
+        }
+    }
+    /**
+     * @OA\Put(
+     *     path="/api/edit-user",
+     *     summary="Update user information",
+     *     description="Update a user's name, email, and/or password",
+     *     tags={"User"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         description="The ID of the user to update",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="The new name of the user",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="email",
+     *         in="query",
+     *         description="The new email of the user",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="password",
+     *         in="query",
+     *         description="The new password of the user",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User information updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 description="The status of the response",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="A message indicating the result of the update",
+     *                 example="User has been updated successfully"
+     *             ),
+     *             @OA\Property(
+     *                 property="user",
+     *                 description="The updated user object"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 description="The status of the response",
+     *                 example="error"
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="A message indicating that the user was not found",
+     *                 example="User not found"
+     *             ),
+     *         ),
+     *     ),
+     * )
+     */
+    public function editUser(Request $request)
+    {
+        $user = User::where('id', $request->id)->first();
+        if ($user) {
+            if ($request->has('name')) {
+                $user->name = $request->name;
+            }
+            if ($request->has('email')) {
+                $user->email = $request->email;
+            }
+            if ($request->has('password')) {
+                $user->password = Hash::make($request->password);
+            }
+            $user->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'user has been updated successfuly',
+                'user'   => $user
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'user not found',
+            ], 404);
+        }
+    }
+    /**
+     * @OA\Delete(
+     *     path="/api/delete-user",
+     *     summary="Delete a user",
+     *     description="Deletes a specific user based on their ID",
+     *     tags={"User"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The ID of the user to be deleted",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 description="The status of the response",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="The message to be returned",
+     *                 example="User deleted successfully"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 description="The status of the response",
+     *                 example="error"
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="The message to be returned",
+     *                 example="User not found"
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function deleteUser(Request $request)
+    {
+        $user = User::find($request->id);
+        if ($user) {
+            $user->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'user deleted successfuly'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'user not found',
+            ], 404);
         }
     }
 }

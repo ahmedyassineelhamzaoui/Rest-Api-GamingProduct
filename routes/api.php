@@ -29,4 +29,6 @@ Route::controller(UserController::class)->group(function(){
    Route::delete('close-account','closeAccount');
    Route::put('contact-info','updateProfile');
    Route::get('users','getAllUsers');
+   Route::put('edit-user','editUser');
+   Route::delete('delete-user','deleteUser');
 });
