@@ -209,7 +209,7 @@
         "/api/add-categorie": {
             "post": {
                 "tags": [
-                    "Category"
+                    "Categorie"
                 ],
                 "summary": "Add a new category",
                 "description": "Adds a new category with the given name",
@@ -269,6 +269,74 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Category already exists"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/delete-categorie": {
+            "delete": {
+                "tags": [
+                    "Categorie"
+                ],
+                "summary": "Delete a categorie",
+                "description": "Deletes a specific categorie based on its ID",
+                "operationId": "581a85e375b0529535ae48ac2b1ce341",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the categorie to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categorie deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "The message to be returned",
+                                            "type": "string",
+                                            "example": "Categorie deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categorie not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "description": "The message to be returned",
+                                            "type": "string",
+                                            "example": "Categorie not found"
                                         }
                                     },
                                     "type": "object"

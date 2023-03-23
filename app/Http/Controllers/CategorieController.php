@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class CategorieController extends Controller
 {
@@ -18,7 +19,7 @@ class CategorieController extends Controller
     *     path="/api/add-categorie",
     *     summary="Add a new category",
     *     description="Adds a new category with the given name",
-    *     tags={"Category"},
+    *     tags={"Categorie"},
     *     @OA\RequestBody(
     *         required=true,
     *         description="The category information",
@@ -68,6 +69,101 @@ class CategorieController extends Controller
             'message' => 'categorie created successfuly',
             'Categorie' => $categorie
          ], 200);
+      }
+   }
+   /**
+    * @OA\Delete(
+    *     path="/api/delete-categorie",
+    *     summary="Delete a categorie",
+    *     description="Deletes a specific categorie based on its ID",
+    *     tags={"Categorie"},
+    *     @OA\Parameter(
+    *         name="id",
+    *         in="path",
+    *         description="The ID of the categorie to be deleted",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="integer",
+    *             format="int64"
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="Categorie deleted successfully",
+    *         @OA\JsonContent(
+    *             @OA\Property(
+    *                 property="status",
+    *                 type="string",
+    *                 description="The status of the response",
+    *                 example="success"
+    *             ),
+    *             @OA\Property(
+    *                 property="message",
+    *                 type="string",
+    *                 description="The message to be returned",
+    *                 example="Categorie deleted successfully"
+    *             )
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=404,
+    *         description="Categorie not found",
+    *         @OA\JsonContent(
+    *             @OA\Property(
+    *                 property="status",
+    *                 type="string",
+    *                 description="The status of the response",
+    *                 example="error"
+    *             ),
+    *             @OA\Property(
+    *                 property="message",
+    *                 type="string",
+    *                 description="The message to be returned",
+    *                 example="Categorie not found"
+    *             )
+    *         )
+    *     )
+    * )
+    */
+
+   public function deleteCategorie(Request $request)
+   {
+      $request->validate([
+         'id'  => 'required|integer'
+      ]);
+      $categorie = Categorie::find($request->id);
+      if ($categorie) {
+         $categorie->delete();
+         return response()->json([
+            'status' => 'success',
+            'message' => 'categorie has been deleted successfuly'
+         ], 200);
+      } else {
+         return response()->json([
+            'status'  => 'error',
+            'message' => 'categorie not found'
+         ], 404);
+      }
+   }
+   public function updateCtaegorie(Request $request)
+   {
+      $request->validate([
+         'id' => 'required|integer '
+      ]);
+      $categorie = Categorie::find($request->id);
+      if ($categorie) {
+         if ($request->has('name')) {
+            $categorie->name = $request->name;
+         }
+         return response()->json([
+            'status' => 'success',
+            'message' => 'categorie updated successfuly'
+         ],200);
+      } else {
+         return response()->json([
+            'status' => 'error',
+            'message' => 'categorie not found'
+         ],404);
       }
    }
 }
