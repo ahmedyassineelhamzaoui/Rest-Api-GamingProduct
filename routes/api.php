@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,8 @@ Route::controller(UserController::class)->group(function(){
    Route::get('users','getAllUsers');
    Route::put('edit-user','editUser');
    Route::delete('delete-user','deleteUser');
+});
+
+Route::controller(CategorieController::class)->group(function(){
+   Route::post('create-categorie','addCategorie');
 });

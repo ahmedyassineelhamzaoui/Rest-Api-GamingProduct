@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['sendEmail', 'changePassword', 'failedResponse', 'successResponse']]);
+        $this->middleware('auth:api', ['except' => ['sendEmail', 'changePassword', 'failedResponse', 'successResponse','getAllUsers']]);
     }
     /**
      * @OA\Post(
@@ -592,7 +592,7 @@ class UserController extends Controller
      *         )
      *     )
      * )
-     */
+    */
     public function deleteUser(Request $request)
     {
         $user = User::find($request->id);
