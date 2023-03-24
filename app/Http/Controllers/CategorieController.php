@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Categorie;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
 class CategorieController extends Controller
 {
    public function __construct()
    {
-      $this->middleware('auth:api', ['except' => ['getAllCategorie']]);
+      $this->middleware('auth:api', ['except' => ['getAllCategories']]);
    }
    /**
     * Add a new category
@@ -48,7 +47,7 @@ class CategorieController extends Controller
     *         )
     *     )
     * )
-    */
+   */
    public function addCategorie(Request $request)
    {
       $request->validate([
@@ -124,12 +123,11 @@ class CategorieController extends Controller
     *         )
     *     )
     * )
-    */
-
+   */
    public function deleteCategorie(Request $request)
    {
       $request->validate([
-         'id'  => 'required|integer'
+         'id'  => 'required|integer',
       ]);
       $categorie = Categorie::find($request->id);
       if ($categorie) {
@@ -212,7 +210,7 @@ class CategorieController extends Controller
     *         )
     *     )
     * )
-    */
+   */
    public function updateCategorie(Request $request)
    {
       $request->validate([
@@ -234,6 +232,71 @@ class CategorieController extends Controller
             'status' => 'error',
             'message' => 'categorie not found'
          ], 404);
+      }
+   }
+   /**
+    * @OA\Get(
+    *     path="/api/categories",
+    *     summary="Get all categories",
+    *     description="Returns a list of all categories",
+    *     tags={"Categorie"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="List of categories",
+    *         @OA\JsonContent(
+    *             @OA\Property(
+    *                 property="status",
+    *                 type="string",
+    *                 description="The status of the response",
+    *                 example="success"
+    *             ),
+    *             @OA\Property(
+    *                 property="categories",
+    *                 type="array",
+    *                 description="The list of categories",
+    *                 @OA\Items(
+    *                     @OA\Property(
+    *                         property="id",
+    *                         type="integer",
+    *                         description="The ID of the category",
+    *                         example="1"
+    *                     ),
+    *                     @OA\Property(
+    *                         property="name",
+    *                         type="string",
+    *                         description="The name of the category",
+    *                         example="Category 1"
+    *                     )
+    *                 )
+    *             )
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=404,
+    *         description="No categories available",
+    *         @OA\JsonContent(
+    *             @OA\Property(
+    *                 property="message",
+    *                 type="string",
+    *                 description="The message to be returned",
+    *                 example="No categories available"
+    *             )
+    *         )
+    *     )
+    * )
+   */
+   public function getAllCategories()
+   {
+      $categories = Categorie::all('id', 'name');
+      if ($categories->count() > 0) {
+         return response()->json([
+            'status' => 'success',
+            'categories' => $categories
+         ]);
+      } else {
+         return response()->json([
+            'message' => 'no ctegorie available'
+         ]);
       }
    }
 }

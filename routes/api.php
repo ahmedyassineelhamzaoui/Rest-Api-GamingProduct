@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\UserController;
+use App\Http\controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,7 +36,12 @@ Route::controller(UserController::class)->group(function(){
 });
 
 Route::controller(CategorieController::class)->group(function(){
+   Route::get('categories','getAllCategories');
    Route::post('create-categorie','addCategorie');
    Route::delete('delete-categorie','deleteCategorie');
    Route::put('update-categorie','updateCategorie');
+});
+
+Route::controller(ProductController::class)->group(function(){
+    Route::post('add-product','addProduct');
 });
