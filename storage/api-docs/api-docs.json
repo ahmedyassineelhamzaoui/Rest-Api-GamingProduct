@@ -861,6 +861,82 @@
                 }
             }
         },
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get all products",
+                "description": "Returns all products in the system",
+                "operationId": "9e289d6b0d7637b34630d235f1cea155",
+                "responses": {
+                    "200": {
+                        "description": "A list of products",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "The list of products",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "The ID of the product",
+                                                        "type": "integer"
+                                                    },
+                                                    "title": {
+                                                        "description": "The title of the product",
+                                                        "type": "string"
+                                                    },
+                                                    "description": {
+                                                        "description": "The description of the product",
+                                                        "type": "string"
+                                                    },
+                                                    "price": {
+                                                        "description": "The price of the product",
+                                                        "type": "number",
+                                                        "format": "float"
+                                                    },
+                                                    "categorie_id": {
+                                                        "description": "The ID of the category to which the product belongs",
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No products found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "The error message",
+                                            "type": "string",
+                                            "example": "No products found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/reset-pasword": {
             "post": {
                 "tags": [

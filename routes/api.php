@@ -46,4 +46,5 @@ Route::controller(ProductController::class)->group(function(){
     Route::post('add-product','addProduct');
     Route::put('update-product','updateProduct');
     Route::delete('delete-product','deleteProduct');
+    Route::get('products','getAllProducts');
 });

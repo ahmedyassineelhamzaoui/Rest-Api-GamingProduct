@@ -343,4 +343,83 @@ class ProductController extends Controller
             'message' => 'product deleted successfuly',
         ], 200);
     }
+    /**
+     * @OA\Get(
+     *     path="/api/products",
+     *     summary="Get all products",
+     *     description="Returns all products in the system",
+     *     tags={"Product"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="A list of products",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 description="The status of the response",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="array",
+     *                 description="The list of products",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer",
+     *                         description="The ID of the product",
+     *                     ),
+     *                     @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         description="The title of the product",
+     *                     ),
+     *                     @OA\Property(
+     *                         property="description",
+     *                         type="string",
+     *                         description="The description of the product",
+     *                     ),
+     *                     @OA\Property(
+     *                         property="price",
+     *                         type="number",
+     *                         format="float",
+     *                         description="The price of the product",
+     *                     ),
+     *                     @OA\Property(
+     *                         property="categorie_id",
+     *                         type="integer",
+     *                         description="The ID of the category to which the product belongs",
+     *                     ),
+     *                 ),
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="No products found",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="The error message",
+     *                 example="No products found"
+     *             ),
+     *         ),
+     *     ),
+     * )
+     */
+    public function getAllProducts()
+    {
+        $products = Product::all();
+        if ($products->count() > 0) {
+            return response()->json([
+                'status' => 'success',
+                'message' => $products
+            ],200);
+        }
+        return response()->json([
+            'message' => 'no data available'
+        ],404);
+    }
 }
