@@ -50,6 +50,7 @@ class CategorieController extends Controller
    */
    public function addCategorie(Request $request)
    {
+      
       $request->validate([
          'name' => 'required|string|max:100'
       ]);

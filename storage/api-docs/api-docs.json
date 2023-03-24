@@ -682,6 +682,185 @@
                 ]
             }
         },
+        "/api/update-product": {
+            "put": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Update a product",
+                "description": "Updates a specific product based on its ID",
+                "operationId": "c3f881009b52dee85956f74770f0734f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The ID of the product to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "The title of the product",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 200
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "The description of the product",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 10
+                        }
+                    },
+                    {
+                        "name": "price",
+                        "in": "query",
+                        "description": "The price of the product",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float"
+                        }
+                    },
+                    {
+                        "name": "categorie_id",
+                        "in": "query",
+                        "description": "The ID of the category to which the product belongs",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "The message to be returned",
+                                            "type": "string",
+                                            "example": "product has been updated successfully"
+                                        },
+                                        "product": {
+                                            "description": "The updated product object",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "description": "The message to be returned",
+                                            "type": "string",
+                                            "example": "this id doesn't exist"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/delete-product": {
+            "delete": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Delete a product",
+                "description": "Deletes a specific product based on its ID",
+                "operationId": "00a007c20cf0f2856c8cba8b7a01e3fd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The ID of the product to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "The message to be returned",
+                                            "type": "string",
+                                            "example": "product deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "The status of the response",
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "description": "The message to be returned",
+                                            "type": "string",
+                                            "example": "the id that you enter not exist"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/reset-pasword": {
             "post": {
                 "tags": [
