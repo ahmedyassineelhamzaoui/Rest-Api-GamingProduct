@@ -96,6 +96,7 @@ class ProductController extends Controller
     public function addProduct(Request $request)
     {
         $user = auth()->user();
+        
         $validateData = $request->validate([
             'title'        => 'required|string|max:200',
             'description'  => 'required|min:10|string',
