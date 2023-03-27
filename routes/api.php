@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\UserController;
 use App\Http\controllers\ProductController;
+use App\Http\controllers\RoleController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -47,4 +49,12 @@ Route::controller(ProductController::class)->group(function(){
     Route::put('update-product','updateProduct');
     Route::delete('delete-product','deleteProduct');
     Route::get('products','getAllProducts');
+});
+
+Route::controller(RoleController::class)->group(function(){
+    Route::post('add-role','addRole');
+    Route::put('update-role','updateRole');
+    Route::delete('delete-role','deleteRole');
+    Route::get('roles','getAllRoles');
+    Route::post('showrole','showRole');
 });

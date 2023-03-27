@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categorie;
 use App\Models\Product;
 use Illuminate\Http\Request;
+
 use PhpParser\Node\Stmt\Catch_;
 
 class ProductController extends Controller
@@ -91,12 +92,16 @@ class ProductController extends Controller
      *         )
      *     )
      * )
-     */
-
+    */
     public function addProduct(Request $request)
     {
         $user = auth()->user();
-        
+        if(!$user->hasPermissionTo('product-create')){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You dont have permission to add product'
+            ], 200);
+        }
         $validateData = $request->validate([
             'title'        => 'required|string|max:200',
             'description'  => 'required|min:10|string',
@@ -227,11 +232,16 @@ class ProductController extends Controller
      *         )
      *     )
      * )
-     */
-
+    */
     public function updateProduct(Request $request)
     {
-
+        $user = auth()->user();
+        if(!$user->hasPermissionTo('product-edit')){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You dont have permission to add product'
+            ], 200);
+        }
         $request->validate([
             'id'           => 'required|numeric',
             'title'        => 'string|max:200',
@@ -325,9 +335,16 @@ class ProductController extends Controller
      *         )
      *     )
      * )
-     */
+    */
     public function deleteProduct(Request $request)
     {
+        $user = auth()->user();
+        if(!$user->hasPermissionTo('product-delete')){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You dont have permission to add product'
+            ], 200);
+        }
         $request->validate([
             'id' => 'required|numeric'
         ]);
@@ -409,7 +426,7 @@ class ProductController extends Controller
      *         ),
      *     ),
      * )
-     */
+    */
     public function getAllProducts()
     {
         $products = Product::all();

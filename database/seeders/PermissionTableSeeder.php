@@ -22,6 +22,10 @@ class PermissionTableSeeder extends Seeder
             'role-create',
             'role-edit',
             'role-delete',
+            'user-create',
+            'user-edit',
+            'user-delete',
+            'user-list',
             'product-list',
             'product-create',
             'product-edit',
@@ -29,11 +33,7 @@ class PermissionTableSeeder extends Seeder
             'categorie-list',
             'categorie-create',
             'categorie-edit',
-            'categorie-delete',
-            'user-list',
-            'user-create',
-            'user-edit',
-            'user-delete'
+            'categorie-delete',            
         ];
        
         foreach ($permissions as $permission) {
@@ -49,11 +49,11 @@ class PermissionTableSeeder extends Seeder
         Role::create(['name' => $admin])->givePermissionTo(Permission::all());
 
         Role::create(['name' => $commercial])->givePermissionTo([
-            array_slice($permissions, 4, 11)
+            array_slice($permissions, 8, 15)
         ]);
 
         Role::create(['name' => $user])->givePermissionTo([
-            $permissions[4]
+            $permissions[8]
         ]);
         
     }
