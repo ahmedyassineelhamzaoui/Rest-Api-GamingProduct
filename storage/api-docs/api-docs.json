@@ -206,27 +206,97 @@
                 }
             }
         },
-        "/api/add-categorie": {
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get all categories",
+                "description": "Retrieve all available categories.",
+                "operationId": "6762fab0195ef6e737412420c7203c7d",
+                "responses": {
+                    "200": {
+                        "description": "Categories retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Category 1"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No categories available.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No categories available."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
-                    "Categorie"
+                    "Category"
                 ],
                 "summary": "Add a new category",
-                "description": "Adds a new category with the given name",
-                "operationId": "7f923bf74b0777fba73be68c281103a6",
+                "description": "Creates a new category with the given name",
+                "operationId": "14de65290cc9609182eb4cb1e99312c7",
                 "requestBody": {
-                    "description": "The category information",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "name"
-                                ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "maxLength": 100
+                                        "example": "Category name"
                                     }
                                 },
                                 "type": "object"
@@ -249,7 +319,61 @@
                                             "type": "string",
                                             "example": "Category created successfully"
                                         },
-                                        "Categorie": {}
+                                        "Categorie": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You dont have permission to add categorie"
+                                        }
                                     },
                                     "type": "object"
                                 }
@@ -275,23 +399,44 @@
                                 }
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/delete-categorie": {
             "delete": {
                 "tags": [
-                    "Categorie"
+                    "Category"
                 ],
-                "summary": "Delete a categorie",
-                "description": "Deletes a specific categorie based on its ID",
+                "summary": "Delete a category",
+                "description": "Deletes the category with the given ID",
                 "operationId": "581a85e375b0529535ae48ac2b1ce341",
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "path",
-                        "description": "The ID of the categorie to be deleted",
+                        "in": "query",
+                        "description": "The ID of the category to delete",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -301,20 +446,70 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Categorie deleted successfully",
+                        "description": "Category deleted successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "description": "The status of the response",
                                             "type": "string",
                                             "example": "success"
                                         },
                                         "message": {
-                                            "description": "The message to be returned",
                                             "type": "string",
-                                            "example": "Categorie deleted successfully"
+                                            "example": "Category has been deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You dont have permission to delete categorie"
                                         }
                                     },
                                     "type": "object"
@@ -323,20 +518,34 @@
                         }
                     },
                     "404": {
-                        "description": "Categorie not found",
+                        "description": "Category not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "description": "The status of the response",
                                             "type": "string",
                                             "example": "error"
                                         },
                                         "message": {
-                                            "description": "The message to be returned",
                                             "type": "string",
-                                            "example": "Categorie not found"
+                                            "example": "Category not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error."
                                         }
                                     },
                                     "type": "object"
@@ -344,22 +553,27 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/update-categorie": {
             "put": {
                 "tags": [
-                    "Categorie"
+                    "Category"
                 ],
-                "summary": "Update a categorie",
-                "description": "Updates a specific categorie based on its ID",
+                "summary": "Update a category",
+                "description": "Updates the category with the given ID",
                 "operationId": "77810c8c97e0630a2b85ce7294d6c7b3",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "query",
-                        "description": "The ID of the categorie to be updated",
+                        "description": "The ID of the category to update",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -369,7 +583,7 @@
                     {
                         "name": "name",
                         "in": "query",
-                        "description": "The name of the categorie",
+                        "description": "The name of the category",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -378,23 +592,20 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Categorie updated successfully",
+                        "description": "Category updated successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "description": "The status of the response",
                                             "type": "string",
                                             "example": "success"
                                         },
                                         "message": {
-                                            "description": "The message to be returned",
                                             "type": "string",
-                                            "example": "categorie updated successfully"
+                                            "example": "Category updated successfully"
                                         },
                                         "categorie": {
-                                            "description": "The updated categorie object",
                                             "type": "object"
                                         }
                                     },
@@ -403,69 +614,51 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Categorie not found",
+                    "400": {
+                        "description": "Invalid request parameters",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "description": "The status of the response",
-                                            "type": "string",
-                                            "example": "error"
-                                        },
                                         "message": {
-                                            "description": "The message to be returned",
                                             "type": "string",
-                                            "example": "categorie not found"
+                                            "example": "The given data was invalid."
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
-                    }
-                }
-            }
-        },
-        "/api/categories": {
-            "get": {
-                "tags": [
-                    "Categorie"
-                ],
-                "summary": "Get all categories",
-                "description": "Returns a list of all categories",
-                "operationId": "6762fab0195ef6e737412420c7203c7d",
-                "responses": {
-                    "200": {
-                        "description": "List of categories",
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "description": "The status of the response",
                                             "type": "string",
-                                            "example": "success"
+                                            "example": "error"
                                         },
-                                        "categories": {
-                                            "description": "The list of categories",
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "description": "The ID of the category",
-                                                        "type": "integer",
-                                                        "example": "1"
-                                                    },
-                                                    "name": {
-                                                        "description": "The name of the category",
-                                                        "type": "string",
-                                                        "example": "Category 1"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You dont have permission to update product"
                                         }
                                     },
                                     "type": "object"
@@ -474,15 +667,34 @@
                         }
                     },
                     "404": {
-                        "description": "No categories available",
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Category not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
-                                            "description": "The message to be returned",
                                             "type": "string",
-                                            "example": "No categories available"
+                                            "example": "Internal server error."
                                         }
                                     },
                                     "type": "object"
@@ -490,7 +702,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/add-product": {

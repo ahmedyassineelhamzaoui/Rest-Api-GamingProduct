@@ -12,45 +12,75 @@ class CategorieController extends Controller
       $this->middleware('auth:api', ['except' => ['getAllCategories']]);
    }
    /**
-    * Add a new category
-    *
-    * @OA\Post(
-    *     path="/api/add-categorie",
-    *     summary="Add a new category",
-    *     description="Adds a new category with the given name",
-    *     tags={"Categorie"},
-    *     @OA\RequestBody(
-    *         required=true,
-    *         description="The category information",
-    *         @OA\JsonContent(
-    *             required={"name"},
-    *             @OA\Property(property="name", type="string", maxLength=100)
-    *         )
-    *     ),
-    *     @OA\Response(
-    *         response=200,
-    *         description="Category created successfully",
-    *         @OA\JsonContent(
-    *             @OA\Property(property="status", type="string", example="success"),
-    *             @OA\Property(property="message", type="string", example="Category created successfully"),
-    *             @OA\Property(
-    *                 property="Categorie",
-    *             )
-    *         )
-    *     ),
-    *     @OA\Response(
-    *         response=409,
-    *         description="Category already exists",
-    *         @OA\JsonContent(
-    *             @OA\Property(property="status", type="string", example="error"),
-    *             @OA\Property(property="message", type="string", example="Category already exists")
-    *         )
-    *     )
-    * )
+      * @OA\Post(
+      *     path="/api/categories",
+      *     summary="Add a new category",
+      *     description="Creates a new category with the given name",
+      *     tags={"Category"},
+      *     security={{"bearerAuth":{}}},
+      *     @OA\RequestBody(
+      *         required=true,
+      *         @OA\JsonContent(
+      *             @OA\Property(property="name", type="string", example="Category name")
+      *         )
+      *     ),
+      *     @OA\Response(
+      *         response=200,
+      *         description="Category created successfully",
+      *         @OA\JsonContent(
+      *             @OA\Property(property="status", type="string", example="success"),
+      *             @OA\Property(property="message", type="string", example="Category created successfully"),
+      *             @OA\Property(property="Categorie", type="object")
+      *         )
+      *     ),
+      *     @OA\Response(
+      *         response=400,
+      *         description="Invalid request parameters",
+      *         @OA\JsonContent(
+      *             @OA\Property(property="message", type="string", example="The given data was invalid.")
+      *         )
+      *     ),
+      *     @OA\Response(
+      *         response=401,
+      *         description="Unauthorized",
+      *         @OA\JsonContent(
+      *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+      *         )
+      *     ),
+      *     @OA\Response(
+      *         response=403,
+      *         description="Forbidden",
+      *         @OA\JsonContent(
+      *             @OA\Property(property="status", type="string", example="error"),
+      *             @OA\Property(property="message", type="string", example="You dont have permission to add categorie")
+      *         )
+      *     ),
+      *     @OA\Response(
+      *         response=409,
+      *         description="Category already exists",
+      *         @OA\JsonContent(
+      *             @OA\Property(property="status", type="string", example="error"),
+      *             @OA\Property(property="message", type="string", example="Category already exists")
+      *         )
+      *     ),
+      *     @OA\Response(
+      *         response=500,
+      *         description="Internal server error",
+      *         @OA\JsonContent(
+      *             @OA\Property(property="message", type="string", example="Internal server error.")
+      *         )
+      *     )
+      * )
    */
    public function addCategorie(Request $request)
    {
-      
+      $user = auth()->user();
+        if(!$user->hasPermissionTo('categorie-create')){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You dont have permission to add categorie'
+            ], 200);
+        }
       $request->validate([
          'name' => 'required|string|max:100'
       ]);
@@ -72,15 +102,17 @@ class CategorieController extends Controller
       }
    }
    /**
+    *
     * @OA\Delete(
     *     path="/api/delete-categorie",
-    *     summary="Delete a categorie",
-    *     description="Deletes a specific categorie based on its ID",
-    *     tags={"Categorie"},
+    *     summary="Delete a category",
+    *     description="Deletes the category with the given ID",
+    *     tags={"Category"},
+    *     security={{"bearerAuth":{}}},
     *     @OA\Parameter(
     *         name="id",
-    *         in="path",
-    *         description="The ID of the categorie to be deleted",
+    *         in="query",
+    *         description="The ID of the category to delete",
     *         required=true,
     *         @OA\Schema(
     *             type="integer",
@@ -89,44 +121,60 @@ class CategorieController extends Controller
     *     ),
     *     @OA\Response(
     *         response=200,
-    *         description="Categorie deleted successfully",
+    *         description="Category deleted successfully",
     *         @OA\JsonContent(
-    *             @OA\Property(
-    *                 property="status",
-    *                 type="string",
-    *                 description="The status of the response",
-    *                 example="success"
-    *             ),
-    *             @OA\Property(
-    *                 property="message",
-    *                 type="string",
-    *                 description="The message to be returned",
-    *                 example="Categorie deleted successfully"
-    *             )
+    *             @OA\Property(property="status", type="string", example="success"),
+    *             @OA\Property(property="message", type="string", example="Category has been deleted successfully")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=400,
+    *         description="Invalid request parameters",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="message", type="string", example="The given data was invalid.")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=401,
+    *         description="Unauthorized",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=403,
+    *         description="Forbidden",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="status", type="string", example="error"),
+    *             @OA\Property(property="message", type="string", example="You dont have permission to delete categorie")
     *         )
     *     ),
     *     @OA\Response(
     *         response=404,
-    *         description="Categorie not found",
+    *         description="Category not found",
     *         @OA\JsonContent(
-    *             @OA\Property(
-    *                 property="status",
-    *                 type="string",
-    *                 description="The status of the response",
-    *                 example="error"
-    *             ),
-    *             @OA\Property(
-    *                 property="message",
-    *                 type="string",
-    *                 description="The message to be returned",
-    *                 example="Categorie not found"
-    *             )
+    *             @OA\Property(property="status", type="string", example="error"),
+    *             @OA\Property(property="message", type="string", example="Category not found")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=500,
+    *         description="Internal server error",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="message", type="string", example="Internal server error.")
     *         )
     *     )
     * )
    */
    public function deleteCategorie(Request $request)
    {
+      $user = auth()->user();
+        if(!$user->hasPermissionTo('categorie-delete')){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You dont have permission to delete categorie'
+            ], 200);
+        }
       $request->validate([
          'id'  => 'required|integer',
       ]);
@@ -147,13 +195,14 @@ class CategorieController extends Controller
    /**
     * @OA\Put(
     *     path="/api/update-categorie",
-    *     summary="Update a categorie",
-    *     description="Updates a specific categorie based on its ID",
-    *     tags={"Categorie"},
+    *     summary="Update a category",
+    *     description="Updates the category with the given ID",
+    *     tags={"Category"},
+    *     security={{"bearerAuth":{}}},
     *     @OA\Parameter(
     *         name="id",
     *         in="query",
-    *         description="The ID of the categorie to be updated",
+    *         description="The ID of the category to update",
     *         required=true,
     *         @OA\Schema(
     *             type="integer",
@@ -163,7 +212,7 @@ class CategorieController extends Controller
     *     @OA\Parameter(
     *         name="name",
     *         in="query",
-    *         description="The name of the categorie",
+    *         description="The name of the category",
     *         required=false,
     *         @OA\Schema(
     *             type="string"
@@ -171,49 +220,61 @@ class CategorieController extends Controller
     *     ),
     *     @OA\Response(
     *         response=200,
-    *         description="Categorie updated successfully",
+    *         description="Category updated successfully",
     *         @OA\JsonContent(
-    *             @OA\Property(
-    *                 property="status",
-    *                 type="string",
-    *                 description="The status of the response",
-    *                 example="success"
-    *             ),
-    *             @OA\Property(
-    *                 property="message",
-    *                 type="string",
-    *                 description="The message to be returned",
-    *                 example="categorie updated successfully"
-    *             ),
-    *             @OA\Property(
-    *                 property="categorie",
-    *                 type="object",
-    *                 description="The updated categorie object",
-    *             )
+    *             @OA\Property(property="status", type="string", example="success"),
+    *             @OA\Property(property="message", type="string", example="Category updated successfully"),
+    *             @OA\Property(property="categorie", type="object")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=400,
+    *         description="Invalid request parameters",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="message", type="string", example="The given data was invalid.")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=401,
+    *         description="Unauthorized",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=403,
+    *         description="Forbidden",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="status", type="string", example="error"),
+    *             @OA\Property(property="message", type="string", example="You dont have permission to update product")
     *         )
     *     ),
     *     @OA\Response(
     *         response=404,
-    *         description="Categorie not found",
+    *         description="Category not found",
     *         @OA\JsonContent(
-    *             @OA\Property(
-    *                 property="status",
-    *                 type="string",
-    *                 description="The status of the response",
-    *                 example="error"
-    *             ),
-    *             @OA\Property(
-    *                 property="message",
-    *                 type="string",
-    *                 description="The message to be returned",
-    *                 example="categorie not found"
-    *             )
+    *             @OA\Property(property="status", type="string", example="error"),
+    *             @OA\Property(property="message", type="string", example="Category not found")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=500,
+    *         description="Internal server error",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="message", type="string", example="Internal server error.")
     *         )
     *     )
     * )
    */
    public function updateCategorie(Request $request)
    {
+      $user = auth()->user();
+        if(!$user->hasPermissionTo('categorie-update')){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You dont have permission to update product'
+            ], 200);
+        }
       $request->validate([
          'id' => 'required|integer '
       ]);
@@ -239,49 +300,35 @@ class CategorieController extends Controller
     * @OA\Get(
     *     path="/api/categories",
     *     summary="Get all categories",
-    *     description="Returns a list of all categories",
-    *     tags={"Categorie"},
+    *     description="Retrieve all available categories.",
+    *     tags={"Category"},
     *     @OA\Response(
-    *         response=200,
-    *         description="List of categories",
+    *         response="200",
+    *         description="Categories retrieved successfully.",
     *         @OA\JsonContent(
-    *             @OA\Property(
-    *                 property="status",
-    *                 type="string",
-    *                 description="The status of the response",
-    *                 example="success"
-    *             ),
+    *             @OA\Property(property="status", type="string", example="success"),
     *             @OA\Property(
     *                 property="categories",
     *                 type="array",
-    *                 description="The list of categories",
     *                 @OA\Items(
-    *                     @OA\Property(
-    *                         property="id",
-    *                         type="integer",
-    *                         description="The ID of the category",
-    *                         example="1"
-    *                     ),
-    *                     @OA\Property(
-    *                         property="name",
-    *                         type="string",
-    *                         description="The name of the category",
-    *                         example="Category 1"
-    *                     )
+    *                     @OA\Property(property="id", type="integer", example="1"),
+    *                     @OA\Property(property="name", type="string", example="Category 1")
     *                 )
     *             )
     *         )
     *     ),
     *     @OA\Response(
-    *         response=404,
-    *         description="No categories available",
+    *         response="404",
+    *         description="No categories available.",
     *         @OA\JsonContent(
-    *             @OA\Property(
-    *                 property="message",
-    *                 type="string",
-    *                 description="The message to be returned",
-    *                 example="No categories available"
-    *             )
+    *             @OA\Property(property="message", type="string", example="No categories available.")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response="500",
+    *         description="Internal server error.",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="message", type="string", example="Internal server error.")
     *         )
     *     )
     * )
